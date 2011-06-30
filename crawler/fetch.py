@@ -1,4 +1,5 @@
 import logging
+import urllib
 
 log = logging.getLogger('fetch')
 log.setLevel(logging.DEBUG)
@@ -16,6 +17,8 @@ def get_gpx(left, bottom, page):
         'page': page,
     }
     log.debug("Fetching %.2f,%.2f page %d: %s", left, bottom, page, url)
+    return urllib.urlopen(url).read()
+
 
 def parse_args():
     from argparse import ArgumentParser
@@ -24,9 +27,11 @@ def parse_args():
     parser.add_argument('bottom')
     return parser.parse_args()
 
+
 def main():
     args = parse_args()
-    get_gpx(float(args.left), float(args.bottom), 1)
+    print get_gpx(float(args.left), float(args.bottom), 1)
+
 
 if __name__ == '__main__':
     logging.basicConfig()
