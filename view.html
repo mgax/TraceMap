@@ -8,6 +8,7 @@ html, div#map, body {
 }
 body {
     margin: 0;
+    background: black;
 }
 </style>
 </head>
@@ -32,11 +33,11 @@ var map = new OpenLayers.Map('map');
 //map.addLayer(new OpenLayers.Layer.OSM());
 var local_traces = new OpenLayers.Layer.XYZ(
     "Local traces",
-    "http://localhost:8011/traces/${z}/${x}/${y}.png",
+    "http://localhost:8011/sibiu/${z}/${x}/${y}.png",
     {'sphericalMercator': true}
 );
 map.addLayer(local_traces);
-map.setCenter(project(new OpenLayers.LonLat(26.11, 44.44)), 14);
+map.setCenter(project(new OpenLayers.LonLat(24.14, 45.79)), 12);
 });
 </script>
 
