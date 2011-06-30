@@ -49,7 +49,7 @@ class GpxArchive(object):
         file_path = self.root_path.join(dir_name, "%d.gpx" % page)
         log.debug("Saving to %r (%d KB)", str(file_path), len(data)/1024)
         file_path.dirpath().ensure(dir=True)
-        file_path.write(data)
+        file_path.write(data, 'wb')
 
     def save_gpx_parcel(self, parcel, data):
         dir_name = "%.2f,%.2f" % (parcel.left, parcel.bottom)
