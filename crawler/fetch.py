@@ -23,30 +23,37 @@ class FetchOpener(urllib.FancyURLopener):
                "TraceMap/blob/master/crawler/fetch.py")
 
 
-def get_gpx(parcel):
+def get_gpx_page(bottom, left, top, right, page):
     url = url_tmpl % {
-        'bottom': parcel.bottom,
-        'top': parcel.bottom + 0.5,
-        'left': parcel.left,
-        'right': parcel.left + 0.5,
-        'page': parcel.page,
+        'bottom': bottom,
+        'left': left,
+        'top': top,
+        'right': right,
+        'page': page,
     }
-    log.debug("Fetching %r: %s", parcel, url)
+    log.debug("Fetching %s", url)
     return FetchOpener().open(url).read()
+
+
+def get_gpx_parcel(parcel):
+    return get_gpx_page(parcel.bottom, parcel.left,
+                        parcel.bottom + 0.5, parcel.left + 0.5,
+                        parcel.page)
 
 
 class GpxArchive(object):
     def __init__(self, root_path):
         self.root_path = root_path
 
-    def save_gpx(self, parcel, data):
-        dir_name = "%.2f,%.2f" % (parcel.left, parcel.bottom)
-        file_name = "%d.gpx" % parcel.page
-        file_path = self.root_path.join(dir_name, file_name)
-        log.debug("Saving %r to %r (%d KB)",
-                  parcel, str(file_path), len(data)/1024)
+    def save_gpx_file(self, dir_name, page, data):
+        file_path = self.root_path.join(dir_name, "%d.gpx" % page)
+        log.debug("Saving to %r (%d KB)", str(file_path), len(data)/1024)
         file_path.dirpath().ensure(dir=True)
         file_path.write(data)
+
+    def save_gpx_parcel(self, parcel, data):
+        dir_name = "%.2f,%.2f" % (parcel.left, parcel.bottom)
+        self.save_gpx_file(dir_name, parcel.page, data)
 
 
 def parse_args():
@@ -61,8 +68,9 @@ def parse_args():
 def main():
     args = parse_args()
     parcel = Parcel(float(args.left), float(args.bottom), 1)
-    data = get_gpx(parcel)
-    GpxArchive(py.path.local(args.prefix)).save_gpx(parcel, data)
+    data = get_gpx_parcel(parcel)
+    archive = GpxArchive(py.path.local(args.prefix))
+    archive.save_gpx_parcel(parcel, data)
 
 
 if __name__ == '__main__':
