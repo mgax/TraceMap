@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+
+<head>
+<style>
+html, div#map, body {
+    height: 100%;
+}
+body {
+    margin: 0;
+}
+</style>
+</head>
+
+<body>
+
+<div id="map"></div>
+
+<script src="http://openlayers.org/dev/OpenLayers.js"></script>
+<script src="http://code.jquery.com/jquery-1.6.1.min.js"></script>
+
+<script>
+$(function() {
+
+proj_wgs1984 = new OpenLayers.Projection("EPSG:4326");
+map_projection = new OpenLayers.Projection("EPSG:900913");
+project = function(point) {
+  return point.clone().transform(proj_wgs1984, map_projection);
+}
+
+var map = new OpenLayers.Map('map');
+//map.addLayer(new OpenLayers.Layer.OSM());
+var local_traces = new OpenLayers.Layer.XYZ(
+    "Local traces",
+    "http://localhost:8011/traces/${z}/${x}/${y}.png",
+    {'sphericalMercator': true}
+);
+map.addLayer(local_traces);
+map.setCenter(project(new OpenLayers.LonLat(26.11, 44.44)), 14);
+});
+</script>
+
+</body>
+</html>
