@@ -59,18 +59,29 @@ class GpxArchive(object):
 def parse_args():
     from argparse import ArgumentParser
     parser = ArgumentParser()
-    parser.add_argument('left')
-    parser.add_argument('bottom')
+    #parser.add_argument('left')
+    #parser.add_argument('bottom')
     parser.add_argument('-p', '--prefix', dest='prefix', required=True)
     return parser.parse_args()
 
 
 def main():
     args = parse_args()
-    parcel = Parcel(float(args.left), float(args.bottom), 1)
-    data = get_gpx_parcel(parcel)
+    #parcel = Parcel(float(args.left), float(args.bottom), 1)
+    #data = get_gpx_parcel(parcel)
     archive = GpxArchive(py.path.local(args.prefix))
-    archive.save_gpx_parcel(parcel, data)
+    #archive.save_gpx_parcel(parcel, data)
+
+    bottom, top = 45.7411, 45.8455
+    left, right = 24.0428, 24.2378
+
+    page = 1
+    while True:
+        data = get_gpx_page(bottom, left, top, right, page)
+        if 'trkseg' not in data:
+            break
+        archive.save_gpx_file('sibiu', page, data)
+        page += 1
 
 
 if __name__ == '__main__':
