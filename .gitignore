@@ -1,1 +1,3 @@
+*.pyc
 data
+local_fabfile.py
