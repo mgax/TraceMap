@@ -1,23 +1,26 @@
 import logging
 import urllib
+import collections
 import py.path
 
 log = logging.getLogger('fetch')
 log.setLevel(logging.DEBUG)
 
+Parcel = collections.namedtuple('Parcel', 'left bottom page')
+
 url_tmpl = ("http://api.openstreetmap.org/api/0.6/trackpoints"
             "?bbox=%(left).2f,%(bottom).2f,%(right).2f,%(top).2f"
             "&page=%(page)d")
 
-def get_gpx(left, bottom, page):
+def get_gpx(parcel):
     url = url_tmpl % {
-        'bottom': bottom,
-        'top': bottom + 0.5,
-        'left': left,
-        'right': left + 0.5,
-        'page': page,
+        'bottom': parcel.bottom,
+        'top': parcel.bottom + 0.5,
+        'left': parcel.left,
+        'right': parcel.left + 0.5,
+        'page': parcel.page,
     }
-    log.debug("Fetching %.2f,%.2f page %d: %s", left, bottom, page, url)
+    log.debug("Fetching %r: %s", parcel, url)
     return urllib.urlopen(url).read()
 
 
@@ -25,12 +28,14 @@ class GpxArchive(object):
     def __init__(self, root_path):
         self.root_path = root_path
 
-    def save_gpx(self, left, bottom, page, data):
-        dir_name = "%.2f,%.2f" % (left, bottom)
-        file_name = "%d.gpx" % page
-        dir_path = self.root_path.join(dir_name)
-        dir_path.ensure(dir=True)
-        dir_path.join(file_name).write(data)
+    def save_gpx(self, parcel, data):
+        dir_name = "%.2f,%.2f" % (parcel.left, parcel.bottom)
+        file_name = "%d.gpx" % parcel.page
+        file_path = self.root_path.join(dir_name, file_name)
+        log.debug("Saving %r to %r (%d KB)",
+                  parcel, str(file_path), len(data)/1024)
+        file_path.dirpath().ensure(dir=True)
+        file_path.write(data)
 
 
 def parse_args():
@@ -44,11 +49,9 @@ def parse_args():
 
 def main():
     args = parse_args()
-    left = float(args.left)
-    bottom = float(args.bottom)
-    page = 1
-    data = get_gpx(left, bottom, page)
-    GpxArchive(py.path.local(args.prefix)).save_gpx(left, bottom, page, data)
+    parcel = Parcel(float(args.left), float(args.bottom), 1)
+    data = get_gpx(parcel)
+    GpxArchive(py.path.local(args.prefix)).save_gpx(parcel, data)
 
 
 if __name__ == '__main__':
