@@ -33,7 +33,7 @@ var map = new OpenLayers.Map('map');
 //map.addLayer(new OpenLayers.Layer.OSM());
 var local_traces = new OpenLayers.Layer.XYZ(
     "Local traces",
-    "http://localhost:8011/sibiu/${z}/${x}/${y}.png",
+    "tiles/sibiu/${z}/${x}/${y}.png",
     {'sphericalMercator': true}
 );
 map.addLayer(local_traces);
