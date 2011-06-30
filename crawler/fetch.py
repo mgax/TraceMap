@@ -1,3 +1,9 @@
+"""
+Hello! I'm a crawler. My job is to fetch GPS traces from OpenStreetMap. Other
+scripts will make raster map tiles with traces, so JOSM users can load
+them as a TMS layer, instead of downloading traces via the API.
+"""
+
 import logging
 import urllib
 import collections
@@ -12,6 +18,11 @@ url_tmpl = ("http://api.openstreetmap.org/api/0.6/trackpoints"
             "?bbox=%(left).2f,%(bottom).2f,%(right).2f,%(top).2f"
             "&page=%(page)d")
 
+class FetchOpener(urllib.FancyURLopener):
+    version = ("GPS traces crawler, https://github.com/alex-morega/"
+               "TraceMap/blob/master/crawler/fetch.py")
+
+
 def get_gpx(parcel):
     url = url_tmpl % {
         'bottom': parcel.bottom,
@@ -21,7 +32,7 @@ def get_gpx(parcel):
         'page': parcel.page,
     }
     log.debug("Fetching %r: %s", parcel, url)
-    return urllib.urlopen(url).read()
+    return FetchOpener().open(url).read()
 
 
 class GpxArchive(object):
