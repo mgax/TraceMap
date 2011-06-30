@@ -17,8 +17,16 @@ def get_gpx(left, bottom, page):
     }
     log.debug("Fetching %.2f,%.2f page %d: %s", left, bottom, page, url)
 
+def parse_args():
+    from argparse import ArgumentParser
+    parser = ArgumentParser()
+    parser.add_argument('left')
+    parser.add_argument('bottom')
+    return parser.parse_args()
+
 def main():
-    get_gpx(26, 44.5, 1)
+    args = parse_args()
+    get_gpx(float(args.left), float(args.bottom), 1)
 
 if __name__ == '__main__':
     logging.basicConfig()
