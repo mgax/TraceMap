@@ -72,15 +72,15 @@ def main():
     archive = GpxArchive(py.path.local(args.prefix))
     #archive.save_gpx_parcel(parcel, data)
 
-    bottom, top = 45.7411, 45.8455
-    left, right = 24.0428, 24.2378
+    bottom, top = 44.30, 44.61
+    left, right = 25.88, 26.31
 
     page = 1
     while True:
         data = get_gpx_page(bottom, left, top, right, page)
         if 'trkseg' not in data:
             break
-        archive.save_gpx_file('sibiu', page, data)
+        archive.save_gpx_file('bucuresti', page, data)
         page += 1
 
 
