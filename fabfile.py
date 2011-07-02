@@ -1,4 +1,4 @@
-from fabric.api import env, local, cd, run, put
+from fabric.api import env, local, cd, run, put, settings, hide
 from fabric.contrib.files import exists
 from local_fabfile import *
 
@@ -39,3 +39,13 @@ def upload():
     from fabric.contrib.project import rsync_project
     run("mkdir -p '%s'" % server_tiles)
     rsync_project(server_tiles, "data/tiles/", delete=True)
+
+def dbinit():
+    db_name = "tracemap"
+    postgis_share = "/usr/local/share/postgis"
+    with settings(warn_only=True):
+        local("dropdb '%s'" % db_name)
+    with settings(hide('stdout')):
+        local("createdb '%s'" % db_name)
+        local("psql -d %s -f %s/postgis.sql" % (db_name, postgis_share))
+        local("psql -d %s -f %s/spatial_ref_sys.sql" % (db_name, postgis_share))
