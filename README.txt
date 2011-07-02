@@ -4,4 +4,11 @@ importing data into PostgreSQL::
 
 generating tiles::
 
-    tilestache-seed.py -c tilestache.cfg -b 45.79 24.14 45.7901 24.1401 -p 1 -l postgis 16 -x
+    tilestache-seed.py -c tilestache.cfg -b ${box} -p 1 -l tracemap ${zooms}
+
+bounding boxes:
+
+sibiu
+    45.7411 24.0428 45.8455 24.2378
+bucurești
+    44.30 25.88 44.61 26.31
