@@ -30,14 +30,14 @@ project = function(point) {
 }
 
 var map = new OpenLayers.Map('map');
-//map.addLayer(new OpenLayers.Layer.OSM());
+map.addLayer(new OpenLayers.Layer.OSM());
 var local_traces = new OpenLayers.Layer.XYZ(
     "Local traces",
-    "tiles/sibiu/${z}/${x}/${y}.png",
-    {'sphericalMercator': true}
+    "tiles/postgis/${z}/${x}/${y}.png",
+    {'sphericalMercator': true, 'isBaseLayer': false}
 );
 map.addLayer(local_traces);
-map.setCenter(project(new OpenLayers.LonLat(24.14, 45.79)), 12);
+map.setCenter(project(new OpenLayers.LonLat(25.14, 45.79)), 7);
 });
 </script>
 
