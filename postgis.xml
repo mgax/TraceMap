@@ -8,12 +8,14 @@
 
   <xi:include href="styles.xml" />
 
-  <Layer name="tracedata" srs="&gpxproj;">
+  <Layer name="tracedata" status="on" srs="&srs900913;">
     <StyleName>TrackPoints</StyleName>
     <Datasource>
-      <Parameter name="type">ogr</Parameter>
-      <Parameter name="file">data/sibiu-all.gpx</Parameter>
-      <Parameter name="layer">track_points</Parameter>
+      <Parameter name="type">postgis</Parameter>
+      <Parameter name="dbname">tracemap</Parameter>
+      <Parameter name="table">
+        (select way from planet_osm_point) as point
+      </Parameter>
     </Datasource>
   </Layer>
 
