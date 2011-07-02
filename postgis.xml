@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE Map [
+    <!ENTITY % entities SYSTEM "entities.xml.inc">
+%entities;
+]>
+<Map xmlns:xi="http://www.w3.org/2001/XInclude"
+  background-color="transparent" srs="&srs900913;">
+
+  <xi:include href="styles.xml" />
+
+  <Layer name="tracedata" srs="&gpxproj;">
+    <StyleName>TrackPoints</StyleName>
+    <Datasource>
+      <Parameter name="type">ogr</Parameter>
+      <Parameter name="file">data/sibiu-all.gpx</Parameter>
+      <Parameter name="layer">track_points</Parameter>
+    </Datasource>
+  </Layer>
+
+</Map>
