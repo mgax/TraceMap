@@ -33,7 +33,7 @@ var map = new OpenLayers.Map('map');
 map.addLayer(new OpenLayers.Layer.OSM());
 var local_traces = new OpenLayers.Layer.XYZ(
     "Local traces",
-    "tiles/postgis/${z}/${x}/${y}.png",
+    "tiles/tracemap/${z}/${x}/${y}.png",
     {'sphericalMercator': true, 'isBaseLayer': false}
 );
 map.addLayer(local_traces);
