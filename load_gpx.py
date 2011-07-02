@@ -3,7 +3,6 @@
 import sys
 from collections import namedtuple
 import lxml.etree
-from lxml.builder import E
 
 find_trkpt = lxml.etree.XPath('//gpx:trkpt',
     namespaces={'gpx': 'http://www.topografix.com/GPX/1/0'})
@@ -16,13 +15,18 @@ def iter_points():
             for trkpt in find_trkpt(gpx):
                 yield Point(trkpt.attrib['lat'], trkpt.attrib['lon'])
 
+node_tmpl = """\
+  <node id="%(id)d" lat="%(lat)s" visible="true" lon="%(lon)s">
+    <tag k="name" v="gpx"/>
+  </node>
+"""
+
 def main():
-    osm = E.osm(version='0.6')
+    out = sys.stdout
+    out.write('<osm version="0.6">\n')
     for n, point in enumerate(iter_points()):
-        node = E.node(id=str(n), visible='true', lat=point.lat, lon=point.lon)
-        node.append(E.tag(k='name', v='gpx'))
-        osm.append(node)
-    osm.getroottree().write(sys.stdout, pretty_print=True)
+        out.write(node_tmpl % {'lat': point.lat, 'lon': point.lon, 'id': n})
+    out.write('</osm>\n')
 
 if __name__ == '__main__':
     main()
