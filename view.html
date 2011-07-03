@@ -30,12 +30,13 @@ project = function(point) {
 
 var map = new OpenLayers.Map('map');
 map.addLayer(new OpenLayers.Layer.OSM());
-var local_traces = new OpenLayers.Layer.XYZ(
-    "Local traces",
+map.addLayer(new OpenLayers.Layer.XYZ("TraceMap",
     "tiles/tracemap/${z}/${x}/${y}.png",
-    {'sphericalMercator': true, 'isBaseLayer': false}
-);
-map.addLayer(local_traces);
+    {'sphericalMercator': true, 'isBaseLayer': false, 'visibility': false}));
+map.addLayer(new OpenLayers.Layer.XYZ("TraceMap green",
+    "tiles/tracemap-green/${z}/${x}/${y}.png",
+    {'sphericalMercator': true, 'isBaseLayer': false}));
+map.addControl(new OpenLayers.Control.LayerSwitcher());
 map.setCenter(project(new OpenLayers.LonLat(25.14, 45.79)), 7);
 });
 </script>
