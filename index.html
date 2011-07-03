@@ -9,15 +9,71 @@ html, div#map, body {
 body {
     margin: 0;
 }
+div#menu {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 2000;
+  border: 3px solid #58f;
+  padding: 2px 10px;
+  background: white;
+}
+div.dialog-content {
+    display: none;
+}
 </style>
+<link rel="stylesheet"
+      href="http://code.jquery.com/ui/1.8.14/themes/base/jquery-ui.css">
 </head>
 
 <body>
 
 <div id="map"></div>
 
+<div id="menu">
+  <a href="javascript:;">What's this?</a>
+</div>
+
 <script src="http://openlayers.org/dev/OpenLayers.js"></script>
 <script src="http://code.jquery.com/jquery-1.6.1.min.js"></script>
+<script src="http://code.jquery.com/ui/1.8.14/jquery-ui.min.js"></script>
+
+<div id="about" class="dialog-content">
+  <p>
+    TraceMap is a set of tiles rendered from GPS traces that have been
+    uploaded to OpenStreetMap. Its purpose is to make JOSM/Potlatch editing
+    easier by replacing the "download gps traces" feature with a pre-rendered
+    imagery layer.
+  </p>
+  <p>
+    To use the tiles in JOSM, create a new TMS layer, with the
+    URL pattern
+    <tt>http://maps.grep.ro/tiles/tracemap/{zoom}/{x}/{y}.png</tt>. For green
+    traces, instead of grey, replace <tt>tracemap</tt> with
+    <tt>tracemap-green</tt>.
+  </p>
+  <p>
+    Currently, data is available for the Romanian cities of Bucharest and
+    Sibiu, but other areas can be added on request. Contact me at
+    <span id="where"></span>.
+  </p>
+</div>
+<script>(function() {
+    var m = ['x@gr', '.ro', 'ale', 'ep', 'lto', 'mai'];
+    var a = m[2] + m[0] + m[3] + m[1], b = m[5] + m[4] + ':';
+    $('span#where').append($('<a>').attr('href', b + a).text(a));
+})();</script>
+
+<script>
+$(function() {
+$('div#menu a').click(function(evt) {
+  evt.preventDefault();
+  $('div#dialog').remove();
+  var dialog = $('<div id="dialog">').html($('div#about').html());
+  dialog.dialog({minWidth: 500});
+});
+});
+</script>
 
 <script>
 $(function() {
