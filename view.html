@@ -30,13 +30,17 @@ project = function(point) {
 
 var map = new OpenLayers.Map('map');
 map.addLayer(new OpenLayers.Layer.OSM());
+map.addLayer(new OpenLayers.Layer.XYZ("Blank", "black.png",
+    {'sphericalMercator': true, 'isBaseLayer': true}));
 map.addLayer(new OpenLayers.Layer.XYZ("TraceMap",
     "tiles/tracemap/${z}/${x}/${y}.png",
-    {'sphericalMercator': true, 'isBaseLayer': false, 'visibility': false}));
+    {'sphericalMercator': true, 'isBaseLayer': false}));
 map.addLayer(new OpenLayers.Layer.XYZ("TraceMap green",
     "tiles/tracemap-green/${z}/${x}/${y}.png",
-    {'sphericalMercator': true, 'isBaseLayer': false}));
-map.addControl(new OpenLayers.Control.LayerSwitcher());
+    {'sphericalMercator': true, 'isBaseLayer': false, 'visibility': false}));
+var menu = new OpenLayers.Control.LayerSwitcher()
+map.addControl(menu);
+menu.maximizeControl();
 map.setCenter(project(new OpenLayers.LonLat(25.14, 45.79)), 7);
 });
 </script>
